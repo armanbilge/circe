@@ -18,7 +18,7 @@ import cats.syntax.invariant._
 import cats.syntax.eq._
 import io.circe.testing.CodecTests
 import io.circe.tests.CirceMunitSuite
-import io.circe.tests.examples.{ ADT, ADTBar, ADTFoo, Foo, Wub }
+import io.circe.tests.examples.{ Foo, MaybeNothing, Wub }
 import java.net.URI
 import java.util.UUID
 import org.scalacheck.{ Arbitrary, Gen }
@@ -210,28 +210,11 @@ class EitherCodecSuite extends CirceMunitSuite {
 
 class NothingCodecSuite extends CirceMunitSuite {
 
-  implicit val eqADTFoo: Eq[ADTFoo[String, Int]] = Eq.fromUniversalEquals
-  implicit val arbitraryADTFoo: Arbitrary[ADTFoo[String, Int]] = Arbitrary(
-    for {
-      a <- Arbitrary.arbitrary[String]
-      b <- Arbitrary.arbitrary[Int]
-    } yield ADTFoo(a, b)
-  )
-  implicit val eqADTBar: Eq[ADTBar[Int]] = Eq.fromUniversalEquals
-  implicit val arbitraryADTBar: Arbitrary[ADTBar[Int]] = Arbitrary(
-    for {
-      b <- Arbitrary.arbitrary[Int]
-    } yield ADTBar(b)
-  )
-  implicit val eqADT: Eq[ADT[String, Int]] = Eq.fromUniversalEquals
+  implicit val eq: Eq[MaybeNothing[Nothing, Nothing]] = Eq.fromUniversalEquals
+  implicit val arbitrary: Arbitrary[MaybeNothing[Nothing, Nothing]] =
+    Arbitrary(Gen.const(MaybeNothing(None, Nil)))
 
-  implicit val arbitraryADT: Arbitrary[ADT[String, Int]] = Arbitrary(
-    Gen.oneOf(
-      Arbitrary.arbitrary[ADTFoo[String, Int]],
-      Arbitrary.arbitrary[ADTBar[Int]]
-    )
-  )
-  checkAll("Codec[ADT[String, Int]]", CodecTests[ADT[String, Int]].codec)
+  checkAll("Codec[MaybeNothing[Nothing, Nothing]]", CodecTests[MaybeNothing[Nothing, Nothing]].codec)
 
 }
 

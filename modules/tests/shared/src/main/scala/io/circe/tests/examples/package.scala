@@ -148,40 +148,23 @@ package examples {
     }
   }
 
-  sealed trait ADT[+A, +B]
+  case class MaybeNothing[+A, +B](a: Option[A], b: List[B])
 
-  case class ADTFoo[+A, +B](a: A, b: B) extends ADT[A, B]
+  object MaybeNothing {
 
-  case class ADTBar[+B](b: B) extends ADT[Nothing, B]
-
-  object ADT {
-
-    implicit def adtEncoder[A: Encoder, B: Encoder]: Encoder[ADT[A, B]] = Encoder.instance {
-      case foo @ ADTFoo(_, _) =>
+    implicit def encoder[A: Encoder, B: Encoder]: Encoder[MaybeNothing[A, B]] = Encoder.instance {
+      case MaybeNothing(a, b) =>
         Json.obj(
-          "ADTFoo" -> Json.obj(
-            "a" -> Json.fromString(Option(foo.a.toString).getOrElse("")),
-            "b" -> Json.fromString(Option(foo.b.toString).getOrElse(""))
-          )
+          "a" -> Encoder.encodeOption[A].apply(a),
+          "b" -> Encoder.encodeList[B].apply(b)
         )
-      case bar @ ADTBar(_) =>
-        Json.obj("ADTBar" -> Json.obj("b" -> Json.fromString(Option(bar.b.toString).getOrElse(""))))
     }
 
-    implicit def adtDecoder[A: Decoder, B: Decoder]: Decoder[ADT[A, B]] = Decoder.instance { c =>
-      c.keys.map(_.toVector) match {
-        case Some(Vector("ADTFoo")) =>
-          for {
-            a <- c.downField("ADTFoo").downField("a").as[A]
-            b <- c.downField("ADTFoo").downField("b").as[B]
-          } yield ADTFoo(a, b)
-
-        case Some(Vector("ADTBar")) =>
-          for {
-            b <- c.downField("ADTBar").downField("b").as[B]
-          } yield ADTBar(b)
-        case _ => Left(DecodingFailure("ADT", c.history))
-      }
+    implicit def decoder[A: Decoder, B: Decoder]: Decoder[MaybeNothing[A, B]] = Decoder.instance { c =>
+      for {
+        a <- c.downField("a").as[Option[A]]
+        b <- c.downField("b").as[List[B]]
+      } yield MaybeNothing(a, b)
     }
   }
 }
