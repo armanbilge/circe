@@ -33,6 +33,7 @@ import java.time.temporal.TemporalAccessor
 import java.util.Currency
 import java.util.UUID
 import scala.Predef._
+import scala.annotation.nowarn
 import scala.collection.Map
 import scala.collection.immutable.{ Map => ImmutableMap, Set }
 
@@ -173,6 +174,14 @@ object Encoder
    */
   implicit final val encodeUnit: AsObject[Unit] = new AsObject[Unit] {
     final def encodeObject(a: Unit): JsonObject = JsonObject.empty
+  }
+
+  /**
+   * @group Encoding
+   */
+  @nowarn("msg=dead code")
+  implicit final val encodeNothing: Encoder[Nothing] = new Encoder[Nothing] {
+    final def apply(a: Nothing): Json = a
   }
 
   /**
