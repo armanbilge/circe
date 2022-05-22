@@ -18,7 +18,7 @@ import cats.syntax.invariant._
 import cats.syntax.eq._
 import io.circe.testing.CodecTests
 import io.circe.tests.CirceMunitSuite
-import io.circe.tests.examples.{ Foo, Wub }
+import io.circe.tests.examples.{ ADT, ADTBar, ADTFoo, Foo, Wub }
 import java.net.URI
 import java.util.UUID
 import org.scalacheck.{ Arbitrary, Gen }
@@ -206,6 +206,33 @@ class EitherCodecSuite extends CirceMunitSuite {
   checkAll("Codec[Either[Int, String]] via Codec", CodecTests[Either[Int, String]](codec, codec).codec)
   checkAll("Codec[Either[Int, String]] via Decoder and Codec", CodecTests[Either[Int, String]](decoder, codec).codec)
   checkAll("Codec[Either[Int, String]] via Encoder and Codec", CodecTests[Either[Int, String]](codec, encoder).codec)
+}
+
+class NothingCodecSuite extends CirceMunitSuite {
+
+  implicit val eqADTFoo: Eq[ADTFoo[String, Int]] = Eq.fromUniversalEquals
+  implicit val arbitraryADTFoo: Arbitrary[ADTFoo[String, Int]] = Arbitrary(
+    for {
+      a <- Arbitrary.arbitrary[String]
+      b <- Arbitrary.arbitrary[Int]
+    } yield ADTFoo(a, b)
+  )
+  implicit val eqADTBar: Eq[ADTBar[Int]] = Eq.fromUniversalEquals
+  implicit val arbitraryADTBar: Arbitrary[ADTBar[Int]] = Arbitrary(
+    for {
+      b <- Arbitrary.arbitrary[Int]
+    } yield ADTBar(b)
+  )
+  implicit val eqADT: Eq[ADT[String, Int]] = Eq.fromUniversalEquals
+
+  implicit val arbitraryADT: Arbitrary[ADT[String, Int]] = Arbitrary(
+    Gen.oneOf(
+      Arbitrary.arbitrary[ADTFoo[String, Int]],
+      Arbitrary.arbitrary[ADTBar[Int]]
+    )
+  )
+  checkAll("Codec[ADT[String, Int]]", CodecTests[ADT[String, Int]].codec)
+
 }
 
 class ValidatedCodecSuite extends CirceMunitSuite {
