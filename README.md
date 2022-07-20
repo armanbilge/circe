@@ -44,6 +44,7 @@ Are you using circe? Please consider opening a pull request to list your organiz
 * [Gutefrage](https://www.gutefrage.net)
 * [Hello Soda](https://hellosoda.com/)
 * [HERE Technologies](https://www.here.com/)
+* [Hireproof](https://hireproof.io/)
 * [HolidayCheck](https://www.holidaycheck.de)
 * [ImmobilienScout24](https://www.immobilienscout24.de/)
 * [Immozentral](https://www.immozentral.com/)
@@ -54,7 +55,6 @@ Are you using circe? Please consider opening a pull request to list your organiz
 * [MatchesFashion](https://www.matchesfashion.com)
 * [Merit](https://merits.com)
 * [Metacommerce](https://www.metacommerce.ru)
-* [Miras Technologies](http://miras-tech.com/)
 * [Mobile GmbH](https://www.mobile.de)
 * [New Work](https://www.new-work.se/en/)
 * [Ocado Technology](https://ocadotechnology.com)
@@ -87,6 +87,7 @@ Are you using circe? Please consider opening a pull request to list your organiz
 * [VEACT](https://veact.net/)
 * [WeWork](https://www.wework.com)
 * [Whisk](https://whisk.com)
+* [Wide Angle Analytics](https://wideangle.co)
 * [Zalando](https://zalando.de)
 * [Zendesk](https://zendesk.com)
 
