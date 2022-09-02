@@ -27,7 +27,7 @@ import scala.scalajs.js.JSConverters._
  * @groupname Other Equality and other operations
  * @groupprio Other 3
  */
-opaque type JsonObject = js.Object
+opaque type JsonObject <: Matchable = js.Object
 
 /**
  * Constructors, type class instances, and other utilities for [[JsonObject]].
