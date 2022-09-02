@@ -8,7 +8,7 @@ ThisBuild / tlSonatypeUseLegacyHost := false
 
 ThisBuild / crossScalaVersions := Seq("3.1.3")
 
-lazy val root = project.in(file(".")).aggregate(core).enablePlugins(NoPublishPlugin)
+lazy val root = project.in(file(".")).aggregate(core, testing, tests).enablePlugins(NoPublishPlugin)
 
 lazy val core = project
   .in(file("modules/core/shared"))
