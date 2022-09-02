@@ -278,27 +278,27 @@ object Encoder
   /**
    * @group Encoding
    */
-  implicit final val encodeBigInt: Encoder[BigInt] = new Encoder[BigInt] {
-    final def apply(a: BigInt): Json = Json.fromBigInt(a)
-  }
+  // implicit final val encodeBigInt: Encoder[BigInt] = new Encoder[BigInt] {
+  //   final def apply(a: BigInt): Json = Json.fromBigInt(a)
+  // }
 
   /**
    * @group Encoding
    */
-  implicit final lazy val encodeJavaBigInteger: Encoder[java.math.BigInteger] = encodeBigInt.contramap(BigInt.apply)
+  // implicit final lazy val encodeJavaBigInteger: Encoder[java.math.BigInteger] = encodeBigInt.contramap(BigInt.apply)
 
   /**
    * @group Encoding
    */
-  implicit final val encodeBigDecimal: Encoder[BigDecimal] = new Encoder[BigDecimal] {
-    final def apply(a: BigDecimal): Json = Json.fromBigDecimal(a)
-  }
+  // implicit final val encodeBigDecimal: Encoder[BigDecimal] = new Encoder[BigDecimal] {
+  //   final def apply(a: BigDecimal): Json = Json.fromBigDecimal(a)
+  // }
 
   /**
    * @group Encoding
    */
-  implicit final lazy val encodeJavaBigDecimal: Encoder[java.math.BigDecimal] =
-    encodeBigDecimal.contramap(BigDecimal.apply)
+  // implicit final lazy val encodeJavaBigDecimal: Encoder[java.math.BigDecimal] =
+  //   encodeBigDecimal.contramap(BigDecimal.apply)
 
   /**
    * @group Encoding

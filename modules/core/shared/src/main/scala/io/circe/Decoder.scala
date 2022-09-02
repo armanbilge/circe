@@ -48,6 +48,8 @@ import scala.collection.immutable.{ Map => ImmutableMap, Set, SortedMap, SortedS
 import scala.collection.mutable.Builder
 import scala.util.{ Failure, Success, Try }
 
+import scala.scalajs.js
+
 /**
  * A type class that provides a way to produce a value of type `A` from a [[Json]] value.
  */
@@ -675,12 +677,7 @@ object Decoder
    */
   implicit final val decodeFloat: Decoder[Float] = new DecoderWithFailure[Float]("Float") {
     final def apply(c: HCursor): Result[Float] = c.value match {
-      case Json.JNumber(number) => Right(number.toFloat)
-      case Json.JString(string) =>
-        JsonNumber.fromString(string).map(_.toFloat) match {
-          case Some(v) => Right(v)
-          case None    => fail(c)
-        }
+      case Json.JNumber(number)  => Right(number.toFloat)
       case other if other.isNull => Right(Float.NaN)
       case _                     => fail(c)
     }
@@ -704,12 +701,7 @@ object Decoder
    */
   implicit final val decodeDouble: Decoder[Double] = new DecoderWithFailure[Double]("Double") {
     final def apply(c: HCursor): Result[Double] = c.value match {
-      case Json.JNumber(number) => Right(number.toDouble)
-      case Json.JString(string) =>
-        JsonNumber.fromString(string).map(_.toDouble) match {
-          case Some(v) => Right(v)
-          case None    => fail(c)
-        }
+      case Json.JNumber(number)  => Right(number)
       case other if other.isNull => Right(Double.NaN)
       case _                     => fail(c)
     }
@@ -732,14 +724,9 @@ object Decoder
   implicit final val decodeByte: Decoder[Byte] = new DecoderWithFailure[Byte]("Byte") {
     final def apply(c: HCursor): Result[Byte] = c.value match {
       case Json.JNumber(number) =>
-        number.toByte match {
-          case Some(v) => Right(v)
-          case None    => fail(c)
-        }
-      case Json.JString(string) =>
-        JsonNumber.fromString(string).flatMap(_.toByte) match {
-          case Some(value) => Right(value)
-          case None        => fail(c)
+        number.asInstanceOf[Any] match {
+          case b: Byte => Right(b)
+          case _       => fail(c)
         }
       case _ => fail(c)
     }
@@ -762,14 +749,9 @@ object Decoder
   implicit final val decodeShort: Decoder[Short] = new DecoderWithFailure[Short]("Short") {
     final def apply(c: HCursor): Result[Short] = c.value match {
       case Json.JNumber(number) =>
-        number.toShort match {
-          case Some(v) => Right(v)
-          case None    => fail(c)
-        }
-      case Json.JString(string) =>
-        JsonNumber.fromString(string).flatMap(_.toShort) match {
-          case Some(value) => Right(value)
-          case None        => fail(c)
+        number.asInstanceOf[Any] match {
+          case s: Short => Right(s)
+          case _        => fail(c)
         }
       case _ => fail(c)
     }
@@ -792,14 +774,9 @@ object Decoder
   implicit final val decodeInt: Decoder[Int] = new DecoderWithFailure[Int]("Int") {
     final def apply(c: HCursor): Result[Int] = c.value match {
       case Json.JNumber(number) =>
-        number.toInt match {
-          case Some(v) => Right(v)
-          case None    => fail(c)
-        }
-      case Json.JString(string) =>
-        JsonNumber.fromString(string).flatMap(_.toInt) match {
-          case Some(value) => Right(value)
-          case None        => fail(c)
+        number.asInstanceOf[Any] match {
+          case i: Int => Right(i)
+          case _      => fail(c)
         }
       case _ => fail(c)
     }
@@ -825,15 +802,7 @@ object Decoder
   implicit final val decodeLong: Decoder[Long] = new DecoderWithFailure[Long]("Long") {
     final def apply(c: HCursor): Result[Long] = c.value match {
       case Json.JNumber(number) =>
-        number.toLong match {
-          case Some(v) => Right(v)
-          case None    => fail(c)
-        }
-      case Json.JString(string) =>
-        JsonNumber.fromString(string).flatMap(_.toLong) match {
-          case Some(value) => Right(value)
-          case None        => fail(c)
-        }
+        Either.catchNonFatal(BigDecimal.exact(number).toLongExact).toOption.fold(fail(c))(Right(_))
       case _ => fail(c)
     }
   }
@@ -858,15 +827,7 @@ object Decoder
   implicit final val decodeBigInt: Decoder[BigInt] = new DecoderWithFailure[BigInt]("BigInt") {
     final def apply(c: HCursor): Result[BigInt] = c.value match {
       case Json.JNumber(number) =>
-        number.toBigInt match {
-          case Some(v) => Right(v)
-          case None    => fail(c)
-        }
-      case Json.JString(string) =>
-        JsonNumber.fromString(string).flatMap(_.toBigInt) match {
-          case Some(value) => Right(value)
-          case None        => fail(c)
-        }
+        Either.catchNonFatal(BigInt(number.toString)).toOption.fold(fail(c))(Right(_))
       case _ => fail(c)
     }
   }
@@ -893,17 +854,8 @@ object Decoder
    */
   implicit final val decodeBigDecimal: Decoder[BigDecimal] = new DecoderWithFailure[BigDecimal]("BigDecimal") {
     final def apply(c: HCursor): Result[BigDecimal] = c.value match {
-      case Json.JNumber(number) =>
-        number.toBigDecimal match {
-          case Some(v) => Right(v)
-          case None    => fail(c)
-        }
-      case Json.JString(string) =>
-        JsonNumber.fromString(string).flatMap(_.toBigDecimal) match {
-          case Some(value) => Right(value)
-          case None        => fail(c)
-        }
-      case _ => fail(c)
+      case Json.JNumber(number) => Right(BigDecimal.exact(number))
+      case _                    => fail(c)
     }
   }
 

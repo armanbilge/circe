@@ -502,26 +502,26 @@ object Json {
   /**
    * Create a `Json` value representing a JSON number from an `Int`.
    */
-  final def fromInt(value: Int): Json = JNumber(JsonLong(value.toLong))
+  final def fromInt(value: Int): Json = JNumber(value.toDouble)
 
   /**
    * Create a `Json` value representing a JSON number from a `Long`.
    */
-  final def fromLong(value: Long): Json = JNumber(JsonLong(value))
+  final def fromLong(value: Long): Json = JNumber(value.toDouble)
 
   /**
    * Try to create a `Json` value representing a JSON number from a `Double`.
    *
    * The result is empty if the argument cannot be represented as a JSON number.
    */
-  final def fromDouble(value: Double): Option[Json] = if (isReal(value)) Some(JNumber(JsonDouble(value))) else None
+  final def fromDouble(value: Double): Option[Json] = if (isReal(value)) Some(JNumber(value)) else None
 
   /**
    * Try to create a `Json` value representing a JSON number from a `Float`.
    *
    * The result is empty if the argument cannot be represented as a JSON number.
    */
-  final def fromFloat(value: Float): Option[Json] = if (isReal(value)) Some(JNumber(JsonFloat(value))) else None
+  final def fromFloat(value: Float): Option[Json] = if (isReal(value)) Some(JNumber(value.toDouble)) else None
 
   /**
    * Create a `Json` value representing a JSON number or null from a `Double`.
@@ -529,7 +529,7 @@ object Json {
    * The result is a JSON null if the argument cannot be represented as a JSON
    * number.
    */
-  final def fromDoubleOrNull(value: Double): Json = if (isReal(value)) JNumber(JsonDouble(value)) else Null
+  final def fromDoubleOrNull(value: Double): Json = if (isReal(value)) JNumber(value) else Null
 
   /**
    * Create a `Json` value representing a JSON number or null from a `Float`.
@@ -537,7 +537,7 @@ object Json {
    * The result is a JSON null if the argument cannot be represented as a JSON
    * number.
    */
-  final def fromFloatOrNull(value: Float): Json = if (isReal(value)) JNumber(JsonFloat(value)) else Null
+  final def fromFloatOrNull(value: Float): Json = if (isReal(value)) JNumber(value.toDouble) else Null
 
   /**
    * Create a `Json` value representing a JSON number or string from a `Double`.
@@ -546,7 +546,7 @@ object Json {
    * number.
    */
   final def fromDoubleOrString(value: Double): Json =
-    if (isReal(value)) JNumber(JsonDouble(value)) else fromString(java.lang.Double.toString(value))
+    if (isReal(value)) JNumber(value) else fromString(java.lang.Double.toString(value))
 
   /**
    * Create a `Json` value representing a JSON number or string from a `Float`.
@@ -555,19 +555,19 @@ object Json {
    * number.
    */
   final def fromFloatOrString(value: Float): Json =
-    if (isReal(value)) JNumber(JsonFloat(value)) else fromString(java.lang.Float.toString(value))
+    if (isReal(value)) JNumber(value.toDouble) else fromString(java.lang.Float.toString(value))
 
   /**
    * Create a `Json` value representing a JSON number from a `BigInt`.
    */
-  final def fromBigInt(value: BigInt): Json = JNumber(
-    JsonBiggerDecimal(BiggerDecimal.fromBigInteger(value.underlying), value.toString)
-  )
+  // final def fromBigInt(value: BigInt): Json = JNumber(
+  //   JsonBiggerDecimal(BiggerDecimal.fromBigInteger(value.underlying), value.toString)
+  // )
 
   /**
    * Create a `Json` value representing a JSON number from a `BigDecimal`.
    */
-  final def fromBigDecimal(value: BigDecimal): Json = JNumber(JsonBigDecimal(value.underlying))
+  // final def fromBigDecimal(value: BigDecimal): Json = JNumber(JsonBigDecimal(value.underlying))
 
   /**
    * Calling `.isFinite` directly on the value boxes; we explicitly avoid that here.
@@ -591,7 +591,7 @@ object Json {
   implicit final val eqJson: Eq[Json] = Eq.instance {
     case (JObject(a), JObject(b))   => JsonObject.eqJsonObject.eqv(a, b)
     case (JString(a), JString(b))   => a == b
-    case (JNumber(a), JNumber(b))   => JsonNumber.eqJsonNumber.eqv(a, b)
+    case (JNumber(a), JNumber(b))   => a == b
     case (JBoolean(a), JBoolean(b)) => a == b
     case (JArray(a), JArray(b))     => arrayEq(a, b)
     case (x, y)                     => x.isNull && y.isNull

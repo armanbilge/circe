@@ -71,7 +71,7 @@ final case class Printer(
     writer: StringBuilder
   ) extends Printer.PrintingFolder(writer, pieces, dropNullValues, escapeNonAscii, sortKeys) {
     final def onBoolean(value: Boolean): Unit = writer.append(value)
-    final def onNumber(value: JsonNumber): Unit = value.appendToStringBuilder(writer)
+    final def onNumber(value: JsonNumber): Unit = writer.append(value)
   }
 
   @deprecated("Use AppendableFolder", since = "0.14.2")
