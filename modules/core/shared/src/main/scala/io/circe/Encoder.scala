@@ -498,17 +498,15 @@ object Encoder
 
     final def encodeObject(a: M[K, V]): JsonObject = {
       val builder = ImmutableMap.newBuilder[String, Json]
-      val keysBuilder = Vector.newBuilder[String]
       val iterator = toIterator(a)
 
       while (iterator.hasNext) {
         val next = iterator.next()
         val key = encodeK(next._1)
         builder += ((key, encodeV(next._2)))
-        keysBuilder += key
       }
 
-      JsonObject.fromMapAndVector(builder.result(), keysBuilder.result())
+      JsonObject.fromMap(builder.result())
     }
   }
 
