@@ -7,7 +7,7 @@ import io.circe.tests.CirceMunitSuite
 import org.scalacheck.Prop
 import org.scalacheck.Prop.forAll
 
-class JsonSuite extends CirceMunitSuite with FloatJsonTests {
+class JsonSuite extends CirceMunitSuite {
 
   property("foldWith should give the same result as fold")(foldWithProp)
 
@@ -287,8 +287,8 @@ class JsonSuite extends CirceMunitSuite with FloatJsonTests {
   }
 
   test("fromDoubleOrString should return JsonNumber Json values for valid Doubles") {
-    assert(Json.fromDoubleOrString(1.1) === Json.fromJsonNumber(JsonNumber.fromDecimalStringUnsafe("1.1")))
-    assert(Json.fromDoubleOrString(-1.2) === Json.fromJsonNumber(JsonNumber.fromDecimalStringUnsafe("-1.2")))
+    assert(Json.fromDoubleOrString(1.1) === Json.fromJsonNumber(1.1))
+    assert(Json.fromDoubleOrString(-1.2) === Json.fromJsonNumber(-1.2))
   }
 
   test("fromFloat should fail on Float.NaN") {

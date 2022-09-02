@@ -4,7 +4,6 @@ import cats.kernel.instances.string._
 import cats.syntax.eq._
 import io.circe.tests.PrinterSuite
 
-class Spaces2PrinterSuite extends PrinterSuite(Printer.spaces2, parser.`package`) with Spaces2PrinterExample
 class Spaces4PrinterSuite extends PrinterSuite(Printer.spaces4, parser.`package`)
 class UnicodeEscapePrinterSuite extends PrinterSuite(Printer.noSpaces.copy(escapeNonAscii = true), parser.`package`) {
   import io.circe.syntax._
@@ -38,10 +37,3 @@ class UnicodeEscapePrinterWithWriterReuseSuite
       Printer.noSpaces.copy(reuseWriters = true, escapeNonAscii = true),
       parser.`package`
     )
-
-class Spaces2SortKeysPrinterSuite extends PrinterSuite(Printer.spaces2SortKeys, parser.`package`) with SortedKeysSuite
-class Spaces4SortKeysPrinterSuite extends PrinterSuite(Printer.spaces4SortKeys, parser.`package`) with SortedKeysSuite
-class NoSpacesSortKeysPrinterSuite extends PrinterSuite(Printer.noSpacesSortKeys, parser.`package`) with SortedKeysSuite
-class CustomIndentWithSortKeysPrinterSuite
-    extends PrinterSuite(Printer.indented("   ").withSortedKeys, parser.`package`)
-    with SortedKeysSuite

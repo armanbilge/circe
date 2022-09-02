@@ -601,12 +601,12 @@ object Decoder
   /**
    * @group Decoding
    */
-  implicit final val decodeJsonNumber: Decoder[JsonNumber] = new Decoder[JsonNumber] {
-    final def apply(c: HCursor): Result[JsonNumber] = c.value.asNumber match {
-      case Some(v) => Right(v)
-      case None    => Left(DecodingFailure(WrongTypeExpectation("number", c.value), c.history))
-    }
-  }
+  // implicit final val decodeJsonNumber: Decoder[JsonNumber] = new Decoder[JsonNumber] {
+  //   final def apply(c: HCursor): Result[JsonNumber] = c.value.asNumber match {
+  //     case Some(v) => Right(v)
+  //     case None    => Left(DecodingFailure(WrongTypeExpectation("number", c.value), c.history))
+  //   }
+  // }
 
   /**
    * @group Decoding

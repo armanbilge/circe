@@ -157,9 +157,9 @@ object Encoder
   /**
    * @group Encoding
    */
-  implicit final val encodeJsonNumber: Encoder[JsonNumber] = new Encoder[JsonNumber] {
-    final def apply(a: JsonNumber): Json = Json.fromJsonNumber(a)
-  }
+  // implicit final val encodeJsonNumber: Encoder[JsonNumber] = new Encoder[JsonNumber] {
+  //   final def apply(a: JsonNumber): Json = Json.fromJsonNumber(a)
+  // }
 
   /**
    * @group Encoding

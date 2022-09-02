@@ -1183,7 +1183,7 @@ object Cursor {
      * A failure which occurs when attempting ot move left at the start of a JSON
      * array.
      */
-    private[Cursor] final case object MoveLeftIndexOutOfBoundsFailure extends CursorFailureReason {
+    private[Cursor] case object MoveLeftIndexOutOfBoundsFailure extends CursorFailureReason {
       override val failureTarget: FailureTarget =
         FailureTarget.JsonArrayIndexTarget(-1L)
 

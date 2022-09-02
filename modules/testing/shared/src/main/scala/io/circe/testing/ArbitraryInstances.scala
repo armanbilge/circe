@@ -36,21 +36,6 @@ trait ArbitraryInstances extends ArbitraryJsonNumberTransformer with CogenInstan
     )
   )
 
-  implicit val arbitraryJsonNumber: Arbitrary[JsonNumber] = Arbitrary(
-    Gen
-      .oneOf(
-        Arbitrary.arbitrary[IntegralString].map(input => JsonNumber.fromDecimalStringUnsafe(input.value)),
-        Arbitrary.arbitrary[JsonNumberString].map(input => JsonNumber.fromDecimalStringUnsafe(input.value)),
-        Arbitrary.arbitrary[BiggerDecimal].map(input => JsonBiggerDecimal(input, input.toString)),
-        Arbitrary.arbitrary[BigDecimal].map(Json.fromBigDecimal(_).asNumber.get),
-        Arbitrary.arbitrary[BigInt].map(Json.fromBigInt(_).asNumber.get),
-        Arbitrary.arbitrary[Long].map(Json.fromLong(_).asNumber.get),
-        Arbitrary.arbitrary[Double].map(Json.fromDoubleOrString(_).asNumber.get),
-        Arbitrary.arbitrary[Float].map(Json.fromFloatOrString(_).asNumber.get)
-      )
-      .map(transformJsonNumber)
-  )
-
   private[this] val genNull: Gen[Json] = Gen.const(Json.Null)
   private[this] val genBool: Gen[Json] = Arbitrary.arbitrary[Boolean].map(Json.fromBoolean)
   private[this] val genString: Gen[Json] = Arbitrary.arbitrary[String].map(Json.fromString)

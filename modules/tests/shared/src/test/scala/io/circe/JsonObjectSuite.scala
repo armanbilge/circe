@@ -276,67 +276,67 @@ class JsonObjectSuite extends CirceMunitSuite {
     }
   }
 
-  property("add, +:, and remove should be applied correctly") {
-    forAll { (original: JsonObject, operations: List[Either[String, (String, Json, Boolean)]]) =>
-      val result = operations.foldLeft(original) {
-        case (acc, Right((key, value, true)))  => acc.add(key, value)
-        case (acc, Right((key, value, false))) => (key, value) +: acc
-        case (acc, Left(key))                  => acc.remove(key)
-      }
+  // property("add, +:, and remove should be applied correctly") {
+  //   forAll { (original: JsonObject, operations: List[Either[String, (String, Json, Boolean)]]) =>
+  //     val result = operations.foldLeft(original) {
+  //       case (acc, Right((key, value, true)))  => acc.add(key, value)
+  //       case (acc, Right((key, value, false))) => (key, value) +: acc
+  //       case (acc, Left(key))                  => acc.remove(key)
+  //     }
 
-      val expected = operations.foldLeft(original.toList) {
-        case (acc, Right((key, value, true))) =>
-          val index = acc.indexWhere(_._1 == key)
+  //     val expected = operations.foldLeft(original.toList) {
+  //       case (acc, Right((key, value, true))) =>
+  //         val index = acc.indexWhere(_._1 == key)
 
-          if (index < 0) {
-            acc :+ (key -> value)
-          } else {
-            acc.updated(index, (key, value))
-          }
-        case (acc, Right((key, value, false))) =>
-          val index = acc.indexWhere(_._1 == key)
+  //         if (index < 0) {
+  //           acc :+ (key -> value)
+  //         } else {
+  //           acc.updated(index, (key, value))
+  //         }
+  //       case (acc, Right((key, value, false))) =>
+  //         val index = acc.indexWhere(_._1 == key)
 
-          if (index < 0) {
-            (key -> value) :: acc
-          } else {
-            acc.updated(index, (key, value))
-          }
-        case (acc, Left(key)) => acc.filterNot(_._1 == key)
-      }
+  //         if (index < 0) {
+  //           (key -> value) :: acc
+  //         } else {
+  //           acc.updated(index, (key, value))
+  //         }
+  //       case (acc, Left(key)) => acc.filterNot(_._1 == key)
+  //     }
 
-      assertEquals(result.toList, expected)
-    }
-  }
+  //     assertEquals(result.toList, expected)
+  //   }
+  // }
 
-  property("+: should replace existing fields with the same key") {
-    forAll { (head: Json, tail: List[Json], replacement: Json) =>
-      val fields = (head :: tail).zipWithIndex.map {
-        case (value, i) => i.toString -> value
-      }.reverse
+  // property("+: should replace existing fields with the same key") {
+  //   forAll { (head: Json, tail: List[Json], replacement: Json) =>
+  //     val fields = (head :: tail).zipWithIndex.map {
+  //       case (value, i) => i.toString -> value
+  //     }.reverse
 
-      val result1 = ("0" -> replacement) +: JsonObject.fromIterable(fields)
-      val result2 = ("0" -> replacement) +: JsonObject.fromFoldable(fields)
-      val expected = JsonObject.fromFoldable(("0" -> replacement) :: fields.init)
+  //     val result1 = ("0" -> replacement) +: JsonObject.fromIterable(fields)
+  //     val result2 = ("0" -> replacement) +: JsonObject.fromFoldable(fields)
+  //     val expected = JsonObject.fromFoldable(("0" -> replacement) :: fields.init)
 
-      assertEquals(result1, expected)
-      assertEquals(result2, expected)
-    }
-  }
+  //     assertEquals(result1, expected)
+  //     assertEquals(result2, expected)
+  //   }
+  // }
 
-  property("+: should replace existing fields with the same key in the correct position") {
-    forAll { (head: Json, tail: List[Json], replacement: Json) =>
-      val fields = (head :: tail).zipWithIndex.map {
-        case (value, i) => i.toString -> value
-      }
+  // property("+: should replace existing fields with the same key in the correct position") {
+  //   forAll { (head: Json, tail: List[Json], replacement: Json) =>
+  //     val fields = (head :: tail).zipWithIndex.map {
+  //       case (value, i) => i.toString -> value
+  //     }
 
-      val result1 = ("0" -> replacement) +: JsonObject.fromIterable(fields)
-      val result2 = ("0" -> replacement) +: JsonObject.fromFoldable(fields)
-      val expected = JsonObject.fromFoldable(("0" -> replacement) :: fields.tail)
+  //     val result1 = ("0" -> replacement) +: JsonObject.fromIterable(fields)
+  //     val result2 = ("0" -> replacement) +: JsonObject.fromFoldable(fields)
+  //     val expected = JsonObject.fromFoldable(("0" -> replacement) :: fields.tail)
 
-      assertEquals(result1, expected)
-      assertEquals(result2, expected)
-    }
-  }
+  //     assertEquals(result1, expected)
+  //     assertEquals(result2, expected)
+  //   }
+  // }
 
   property("mapValues should transform the JSON object appropriately") {
     forAll { (values: List[Json], replacement: Json) =>

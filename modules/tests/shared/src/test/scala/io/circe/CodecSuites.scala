@@ -81,8 +81,8 @@ class JavaBoxedCodecSuite extends CirceMunitSuite with SpecialEqForFloatAndDoubl
   checkAll("Codec[java.lang.Short]", JavaCodecTests[Short, jl.Short](jl.Short.valueOf, _.shortValue()))
   checkAll("Codec[java.lang.Long]", JavaCodecTests[Long, jl.Long](jl.Long.valueOf, _.longValue()))
   checkAll("Codec[java.lang.Integer]", JavaCodecTests[Int, jl.Integer](jl.Integer.valueOf, _.intValue()))
-  checkAll("Codec[java.math.BigDecimal]", JavaCodecTests[BigDecimal, jm.BigDecimal](_.bigDecimal, BigDecimal.apply))
-  checkAll("Codec[java.math.BigInteger]", JavaCodecTests[BigInt, jm.BigInteger](_.bigInteger, BigInt.apply))
+  // checkAll("Codec[java.math.BigDecimal]", JavaCodecTests[BigDecimal, jm.BigDecimal](_.bigDecimal, BigDecimal.apply))
+  // checkAll("Codec[java.math.BigInteger]", JavaCodecTests[BigInt, jm.BigInteger](_.bigInteger, BigInt.apply))
 }
 
 class StdLibCodecSuite extends CirceMunitSuite with ArrayFactoryInstance {
@@ -91,8 +91,8 @@ class StdLibCodecSuite extends CirceMunitSuite with ArrayFactoryInstance {
   implicit val arbitraryUUID: Arbitrary[UUID] = Arbitrary(Gen.uuid)
 
   checkAll("Codec[String]", CodecTests[String].codec)
-  checkAll("Codec[BigInt]", CodecTests[BigInt].codec)
-  checkAll("Codec[BigDecimal]", CodecTests[BigDecimal].codec)
+  // checkAll("Codec[BigInt]", CodecTests[BigInt].codec)
+  // checkAll("Codec[BigDecimal]", CodecTests[BigDecimal].codec)
   checkAll("Codec[UUID]", CodecTests[UUID].codec)
   checkAll("Codec[URI]", CodecTests[URI].codec)
   checkAll("Codec[Option[Int]]", CodecTests[Option[Int]].codec)

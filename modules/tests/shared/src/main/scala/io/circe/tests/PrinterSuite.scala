@@ -6,7 +6,7 @@ import io.circe.testing.PrinterTests
 import java.nio.charset.StandardCharsets.UTF_8
 import org.scalacheck.Prop.forAll
 
-class PrinterSuite(val printer: Printer, val parser: Parser) extends CirceMunitSuite with PlatformSpecificPrinterTests {
+class PrinterSuite(val printer: Printer, val parser: Parser) extends CirceMunitSuite {
   checkAll("Printing Unit", PrinterTests[Unit].printer(printer, parser))
   checkAll("Printing Boolean", PrinterTests[Boolean].printer(printer, parser))
   checkAll("Printing Char", PrinterTests[Char].printer(printer, parser))

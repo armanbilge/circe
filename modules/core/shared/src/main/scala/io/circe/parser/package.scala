@@ -6,7 +6,7 @@ import scala.util.control.NonFatal
 
 package object parser extends Parser {
   final def parse(input: String): Either[ParsingFailure, Json] = (
-    try convertJsToJson(JSON.parse(input))
+    try Right(convertJsToJson(JSON.parse(input)))
     catch {
       case NonFatal(exception) => Left(ParsingFailure(exception.getMessage, exception))
     }
