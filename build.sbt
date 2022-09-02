@@ -6,7 +6,7 @@ ThisBuild / developers += tlGitHubDev("armanbilge", "Arman Bilge")
 ThisBuild / startYear := Some(2022)
 ThisBuild / tlSonatypeUseLegacyHost := false
 
-ThisBuild / crossScalaVersions := Seq("3.1.3", "2.13.8")
+ThisBuild / crossScalaVersions := Seq("3.1.3")
 
 lazy val root = project.in(file(".")).aggregate(core).enablePlugins(NoPublishPlugin)
 
